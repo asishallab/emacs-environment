@@ -1,0 +1,77 @@
+ence.
+  (let* ((indent-data (parse-partial-sexp (point-min)
+					    (line-beginning-position)))
+	  (indent (car indent-data))
+	   (in-comment (nth 4 indent-data))
+	    close-block
+	     close-comment
+	      pos)
+    (save-excursion
+      (back-to-indentation)
+      (setq close-block (looking-at "}")
+	        close-comment (looking-at "\\*/")))
+    (when close-block
+      (setq indent (1- indent)))
+    (setq pos (* indent css-mode-indent-depth))
+    (if (and in-comment (not close-comment))
+	(+ 3 pos)
+      pos)))
+      
+(defun css-mode-indent-line (&optional indent)
+  "Indent the current line.
+
+If optional INDENT is non-nil, use that instead of calculating the
+indent level."
+  (interactive)
+  (let ((indent (or indent (css-mode-calc-indent-level)))
+	pos)
+    (save-excursion
+      (back-to-indentation)
+      (delete-region (point-at-bol) (point))
+      (indent-to indent)
+      (setq pos (point)))
+    (when (> pos (point))
+      (goto-char pos)))); move only forward after indenting
+
+(defun css-mode-newline-and-indent ()
+  "Insert a newline and indent."
+  (interactive)
+  (newline)
+  (css-mode-indent-line))
+
+(defun css-mode-electric-insert-close-brace ()
+  "Insert a closing brace }."
+  (interactive)
+  (insert "}")
+  (css-mode-indent-line)
+  (forward-char))
+
+(defun css-fill (&rest ignore)
+  "Lay out CSS expressions."
+  (interactive)
+  (condition-case data
+      (progn
+	(backward-up-list 1)
+	(forward-char 1)
+	(newline-and-indent)
+	(catch 'done
+	    (let ((start (point)))
+	          (while (re-search-forward "\n\\|;")
+		          (let* ((data (save-excursion
+					      (parse-partial-sexp start (point))))
+				      (depth (nth 0 data))
+				           (in-string (nth 3 data))
+					        (in-comment (nth 4 data)))
+			    (when (< depth 0)
+			        (throw 'done t))
+			    (when (and (= depth 0)
+				          (not (or in-string in-comment)))
+			        (if (string= (match-string 0) "\n")
+				          (replace-match "")
+				      (newline-and-indent))))))))
+    (scan-error
+     (search-forward "{"))))
+
+(provide 'css-mode)
+
+;;; css-mode-simple.el ends here
