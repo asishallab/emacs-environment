@@ -101,3 +101,6 @@
 (add-to-list 'load-path "/Users/ah/.emacs.d/ess-5.13")
 (add-to-list 'load-path "/Users/ah/.emacs.d/ess-5.13/lisp")
 (require 'ess-site)
+
+;; CSCOPE
+(require 'xcscope)
