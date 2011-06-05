@@ -96,3 +96,8 @@
 ;; Speedbar in same frame
 (require 'sr-speedbar)
 (global-set-key (kbd "s-s") 'sr-speedbar-toggle)
+
+;; ESS
+(add-to-list 'load-path "/Users/ah/.emacs.d/ess-5.13")
+(add-to-list 'load-path "/Users/ah/.emacs.d/ess-5.13/lisp")
+(require 'ess-site)
