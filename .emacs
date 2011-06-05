@@ -29,8 +29,8 @@
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 (add-hook 'yaml-mode-hook
-      '(lambda ()
-        (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+          '(lambda ()
+             (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
 ;; CSS-Mode
 ;;(require 'css-mode-simple)
@@ -63,30 +63,36 @@
 
 ;; Autocomplete
 (require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "/Users/ah/.emacs.d//ac-dict")
+(add-to-list 'ac-dictionary-directories "/Users/ah/.emacs.d/ac-dict")
 (ac-config-default)
-
-;; Replace $RSENSE_HOME with the directory where RSense was installed in full path
-;; Example for UNIX-like systems
-;; (setq rsense-home "/home/tomo/opt/rsense-0.2")
-;; or
-;; (setq rsense-home (expand-file-name "~/opt/rsense-0.2"))
-;; Example for Windows
-;; (setq rsense-home "C:\\rsense-0.2")
-(setq rsense-home "/Users/ah/rsense-0.3")
-(add-to-list 'load-path (concat rsense-home "/etc"))
-(require 'rsense)
-;; Complete by C-c .
-(add-hook 'ruby-mode-hook
-          (lambda ()
-            (local-set-key (kbd "TAB") 'ac-complete-rsense)))
-(add-hook 'ruby-mode-hook
-          (lambda ()
-            (add-to-list 'ac-sources 'ac-source-rsense-method)
-            (add-to-list 'ac-sources 'ac-source-rsense-constant)))
 
 ;; yasnippet
 (add-to-list 'load-path "/Users/ah/.emacs.d/yasnippet-0.6.1c")
 (require 'yasnippet)
 (yas/initialize)
 (yas/load-directory "/Users/ah/.emacs.d/yasnippet-0.6.1c/snippets")
+
+;; CEDET
+(add-to-list 'load-path "/Users/ah/.emacs.d/cedet-1.0")
+(load-file "/Users/ah/.emacs.d/cedet-1.0/common/cedet.el")
+(global-ede-mode 1)                      ; Enable the Project management system
+(require 'semantic-ia)
+(semantic-load-enable-code-helpers) 
+(semantic-load-enable-excessive-code-helpers)
+(defun my-semantic-hook ()
+  (imenu-add-to-menubar "TAGS"))
+(add-hook 'semantic-init-hooks 'my-semantic-hook)
+
+;; Emacs Code Browser - ECB
+(add-to-list 'load-path "/Users/ah/.emacs.d/ecb-2.40")
+(load-file "/Users/ah/.emacs.d/ecb-2.40/ecb.el")
+(require 'ecb)
+(require 'ecb-autoloads)
+
+;; exuberant ctags with speedbar
+(setq speedbar-use-imenu-flag t)
+(setq speedbar-fetch-etags-command "/opt/local/bin/ctags")
+(setq speedbar-fetch-etags-arguments '("-e" "-f" "-"))
+;; Speedbar in same frame
+(require 'sr-speedbar)
+(global-set-key (kbd "s-s") 'sr-speedbar-toggle)
