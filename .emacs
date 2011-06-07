@@ -1,5 +1,5 @@
 ;; Enable loading of all plugins in ~/.emacs.d
-(add-to-list 'load-path "/home/hallab/.emacs.d")
+(add-to-list 'load-path "/Users/ah/.emacs.d")
 
 ;; Highlight region
 (transient-mark-mode 1)
@@ -10,29 +10,30 @@
 ;; Use Windows-Key as Meta-Key
 (setq x-super-keysym 'meta)
 
-;; Icicles
-(add-to-list 'load-path "/home/hallab/.emacs.d/icicles")
-(require 'icicles)
-(icy-mode 1)
-(require 'fuzzy-match)
-
-;; Alacarte
-(require 'lacarte)
-(global-set-key [?\e ?\M-x] 'lacarte-execute-command)
+;; Interactively Do Things (highly recommended, but not strictly required)
+(require 'ido)
+(ido-mode t)
+(ido-everywhere t) 
+(setq ido-confirm-unique-completion t) 
+(setq ido-default-buffer-method 'samewindow) 
+(setq ido-use-filename-at-point t) 
+(setq ido-enable-flex-matching t) 
+(set-face-background 'ido-first-match "white") 
+(set-face-foreground 'ido-subdir "blue3") 
+(icomplete-mode 1) 
+(add-hook 'find-file-hook
+          (lambda ()
+            (setq default-directory command-line-default-directory)))
 
 ;; Vimpulse
 ;;(require 'vimpulse)
 
-;; Interactively Do Things (highly recommended, but not strictly required)
-(require 'ido)
-(ido-mode t)
-
 ;; Rinari
-(add-to-list 'load-path "/home/hallab/.emacs.d/rinari")
+(add-to-list 'load-path "/Users/ah/.emacs.d/rinari")
 (require 'rinari)
 
 ;; YAML-Mode
-(add-to-list 'load-path "/home/hallab/.emacs.d/yaml-mode")
+(add-to-list 'load-path "/Users/ah/.emacs.d/yaml-mode")
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 (add-hook 'yaml-mode-hook
@@ -45,7 +46,7 @@
 
 ;; ruby-mode
 ;; loads ruby mode when a .rb file is opened.
-(add-to-list 'load-path "/home/hallab/.emacs.d/ruby-mode")
+(add-to-list 'load-path "/Users/ah/.emacs.d/ruby-mode")
 (autoload 'ruby-mode "ruby-mode" "Major mode for editing ruby scripts." t)
 (setq auto-mode-alist  (cons '(".rb$" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist  (cons '(".rhtml$" . html-mode) auto-mode-alist))
@@ -57,57 +58,59 @@
 (require 'ruby-electric)
 (add-hook 'ruby-mode-hook (lambda () (ruby-electric-mode t)))
 
-;; ido-mode
-(setq ido-confirm-unique-completion t) 
-(setq ido-default-buffer-method 'samewindow) 
-(setq ido-use-filename-at-point t) 
-(setq ido-enable-flex-matching t) 
-(ido-mode t) 
-(ido-everywhere t) 
-(set-face-background 'ido-first-match "white") 
-(set-face-foreground 'ido-subdir "blue3") 
-(icomplete-mode 1) 
-
-;; Autocomplete
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "/home/hallab/.emacs.d/ac-dict")
-(ac-config-default)
-
 ;; yasnippet
-(add-to-list 'load-path "/home/hallab/.emacs.d/yasnippet-0.6.1c")
+(add-to-list 'load-path "/Users/ah/.emacs.d/yasnippet-0.6.1c")
 (require 'yasnippet)
 (yas/initialize)
-(yas/load-directory "/home/hallab/.emacs.d/yasnippet-0.6.1c/snippets")
-
-;; CEDET
-(add-to-list 'load-path "/home/hallab/.emacs.d/cedet-1.0")
-(load-file "/home/hallab/.emacs.d/cedet-1.0/common/cedet.el")
-(global-ede-mode 1)                      ; Enable the Project management system
-(require 'semantic-ia)
-(semantic-load-enable-code-helpers) 
-(semantic-load-enable-excessive-code-helpers)
-(defun my-semantic-hook ()
-  (imenu-add-to-menubar "TAGS"))
-(add-hook 'semantic-init-hooks 'my-semantic-hook)
-
-;; Emacs Code Browser - ECB
-(add-to-list 'load-path "/home/hallab/.emacs.d/ecb-2.40")
-(load-file "/home/hallab/.emacs.d/ecb-2.40/ecb.el")
-(require 'ecb)
-(require 'ecb-autoloads)
-
-;; exuberant ctags with speedbar
-(setq speedbar-use-imenu-flag t)
-(setq speedbar-fetch-etags-command "/opt/local/bin/ctags")
-(setq speedbar-fetch-etags-arguments '("-e" "-f" "-"))
-;; Speedbar in same frame
-(require 'sr-speedbar)
-(global-set-key (kbd "s-s") 'sr-speedbar-toggle)
+(yas/load-directory "/Users/ah/.emacs.d/yasnippet-0.6.1c/snippets")
 
 ;; ESS
-(add-to-list 'load-path "/home/hallab/.emacs.d/ess-5.13")
-(add-to-list 'load-path "/home/hallab/.emacs.d/ess-5.13/lisp")
+(add-to-list 'load-path "/Users/ah/.emacs.d/ess-5.13")
+(add-to-list 'load-path "/Users/ah/.emacs.d/ess-5.13/lisp")
 (require 'ess-site)
 
 ;; CSCOPE
 (require 'xcscope)
+
+;; Autocomplete
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "/Users/ah/.emacs.d/ac-dict")
+(ac-config-default)
+;; Autocomplete displaying tags:
+(defun ac-semantic-construct-candidates (tags)
+  "Construct candidates from the list inside of tags."
+  (apply 'append
+         (mapcar (lambda (tag)
+                   (if (listp tag)
+                     (let ((type (semantic-tag-type tag))
+                           (class (semantic-tag-class tag))
+                           (name (semantic-tag-name tag)))
+                       (if (or (and (stringp type)
+                                    (string= type "class"))
+                               (eq class 'function)
+                               (eq class 'variable))
+                         (list (list name type class))))))
+                 tags)))
+
+(defvar ac-source-semantic-analysis nil)
+(setq ac-source-semantic
+      `((sigil . "b")
+        (init . (lambda () (setq ac-source-semantic-analysis
+                                 (condition-case nil
+                                                 (ac-semantic-construct-candidates (semantic-fetch-tags))))))
+        (candidates . (lambda ()
+                        (if ac-source-semantic-analysis
+                          (all-completions ac-target (mapcar 'car ac-source-semantic-analysis)))))))
+
+(setq ac-sources (append ac-sources '(ac-source-dictionary ac-source-abbrev ac-source-css-property ac-source-eclim ac-source-features ac-source-filename ac-source-files-in-current-dir ac-source-functions ac-source-gtags ac-source-imenu ac-source-semantic ac-source-semantic-raw ac-source-symbols ac-source-variables ac-source-words-in-all-buffer)))
+
+;; Icicles
+;; clashes with IDO
+; (add-to-list 'load-path "/Users/ah/.emacs.d/icicles")
+; (require 'icicles)
+; (icy-mode 1)
+; (require 'fuzzy-match)
+;; Alacarte
+; (require 'lacarte)
+; (global-set-key [?\\e ?\\M-x] 'lacarte-execute-command)
+
