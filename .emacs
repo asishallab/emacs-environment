@@ -4,6 +4,9 @@
 ;; Highlight region
 (transient-mark-mode 1)
 
+;; Backup-Dir
+(setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
+
 ;; Icicles
 (add-to-list 'load-path "/home/hallab/.emacs.d/icicles")
 (require 'icicles)
