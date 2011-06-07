@@ -1,13 +1,14 @@
 ;; Enable loading of all plugins in ~/.emacs.d
-(add-to-list 'load-path "/Users/ah/.emacs.d")
+(add-to-list 'load-path "/home/hallab/.emacs.d")
 
 ;; Highlight region
 (transient-mark-mode 1)
 
 ;; Icicles
-(add-to-list 'load-path "/Users/ah/.emacs.d/icicles")
+(add-to-list 'load-path "/home/hallab/.emacs.d/icicles")
 (require 'icicles)
 (icy-mode 1)
+(require 'fuzzy-match)
 
 ;; Alacarte
 (require 'lacarte)
@@ -21,11 +22,11 @@
 (ido-mode t)
 
 ;; Rinari
-(add-to-list 'load-path "/Users/ah/.emacs.d/rinari")
+(add-to-list 'load-path "/home/hallab/.emacs.d/rinari")
 (require 'rinari)
 
 ;; YAML-Mode
-(add-to-list 'load-path "/users/ah/.emacs.d/yaml-mode")
+(add-to-list 'load-path "/home/hallab/.emacs.d/yaml-mode")
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 (add-hook 'yaml-mode-hook
@@ -38,7 +39,7 @@
 
 ;; ruby-mode
 ;; loads ruby mode when a .rb file is opened.
-(add-to-list 'load-path "/Users/ah/.emacs.d/ruby-mode")
+(add-to-list 'load-path "/home/hallab/.emacs.d/ruby-mode")
 (autoload 'ruby-mode "ruby-mode" "Major mode for editing ruby scripts." t)
 (setq auto-mode-alist  (cons '(".rb$" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist  (cons '(".rhtml$" . html-mode) auto-mode-alist))
@@ -63,18 +64,18 @@
 
 ;; Autocomplete
 (require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "/Users/ah/.emacs.d/ac-dict")
+(add-to-list 'ac-dictionary-directories "/home/hallab/.emacs.d/ac-dict")
 (ac-config-default)
 
 ;; yasnippet
-(add-to-list 'load-path "/Users/ah/.emacs.d/yasnippet-0.6.1c")
+(add-to-list 'load-path "/home/hallab/.emacs.d/yasnippet-0.6.1c")
 (require 'yasnippet)
 (yas/initialize)
-(yas/load-directory "/Users/ah/.emacs.d/yasnippet-0.6.1c/snippets")
+(yas/load-directory "/home/hallab/.emacs.d/yasnippet-0.6.1c/snippets")
 
 ;; CEDET
-(add-to-list 'load-path "/Users/ah/.emacs.d/cedet-1.0")
-(load-file "/Users/ah/.emacs.d/cedet-1.0/common/cedet.el")
+(add-to-list 'load-path "/home/hallab/.emacs.d/cedet-1.0")
+(load-file "/home/hallab/.emacs.d/cedet-1.0/common/cedet.el")
 (global-ede-mode 1)                      ; Enable the Project management system
 (require 'semantic-ia)
 (semantic-load-enable-code-helpers) 
@@ -84,8 +85,8 @@
 (add-hook 'semantic-init-hooks 'my-semantic-hook)
 
 ;; Emacs Code Browser - ECB
-(add-to-list 'load-path "/Users/ah/.emacs.d/ecb-2.40")
-(load-file "/Users/ah/.emacs.d/ecb-2.40/ecb.el")
+(add-to-list 'load-path "/home/hallab/.emacs.d/ecb-2.40")
+(load-file "/home/hallab/.emacs.d/ecb-2.40/ecb.el")
 (require 'ecb)
 (require 'ecb-autoloads)
 
@@ -98,8 +99,8 @@
 (global-set-key (kbd "s-s") 'sr-speedbar-toggle)
 
 ;; ESS
-(add-to-list 'load-path "/Users/ah/.emacs.d/ess-5.13")
-(add-to-list 'load-path "/Users/ah/.emacs.d/ess-5.13/lisp")
+(add-to-list 'load-path "/home/hallab/.emacs.d/ess-5.13")
+(add-to-list 'load-path "/home/hallab/.emacs.d/ess-5.13/lisp")
 (require 'ess-site)
 
 ;; CSCOPE
