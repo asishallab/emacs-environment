@@ -7,6 +7,9 @@
 ;; Backup-Dir
 (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
 
+;; Use Windows-Key as Meta-Key
+(setq x-super-keysym 'meta)
+
 ;; Icicles
 (add-to-list 'load-path "/home/hallab/.emacs.d/icicles")
 (require 'icicles)
