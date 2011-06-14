@@ -10,6 +10,9 @@
 ;; Use Windows-Key as Meta-Key
 (setq x-super-keysym 'meta)
 
+;; Always show line-numbers on margin:
+(global-linum-mode 1)
+
 ;; CEDET's Speedbar:
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/cedet-1.0"))
 (load-file (expand-file-name "~/.emacs.d/cedet-1.0/common/cedet.el"))
