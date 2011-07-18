@@ -13,6 +13,9 @@
 ;; Always show line-numbers on margin:
 (global-linum-mode 1)
 
+;; GPicker
+(load (expand-file-name "~/.emacs.d/gpicker.el"))
+
 ;; CEDET's Speedbar:
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/cedet-1.0"))
 (load-file (expand-file-name "~/.emacs.d/cedet-1.0/common/cedet.el"))
@@ -43,7 +46,7 @@
             (setq default-directory command-line-default-directory)))
 
 ;; Vimpulse
-;;(require 'vimpulse)
+(require 'vimpulse)
 
 ;; Rinari
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/rinari"))
