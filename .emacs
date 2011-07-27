@@ -15,6 +15,8 @@
 
 ;; GPicker
 (load (expand-file-name "~/.emacs.d/gpicker.el"))
+(global-set-key [?\C-,] 'gpicker-find-file)
+(gpicker-visit-project (expand-file-name "."))
 
 ;; CEDET's Speedbar:
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/cedet-1.0"))
@@ -46,7 +48,7 @@
             (setq default-directory command-line-default-directory)))
 
 ;; Vimpulse
-(require 'vimpulse)
+;; (require 'vimpulse)
 
 ;; Rinari
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/rinari"))
