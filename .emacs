@@ -13,10 +13,16 @@
 ;; Always show line-numbers on margin:
 (global-linum-mode 1)
 
+;; Completion-UI
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/completion-ui"))
+(require 'completion-ui)
+(setq auto-completion-source 'etags)
+(auto-completion-mode)
+
 ;; GPicker
-(load (expand-file-name "~/.emacs.d/gpicker.el"))
-(global-set-key [?\C-,] 'gpicker-find-file)
-(gpicker-visit-project (expand-file-name "."))
+;;(load (expand-file-name "~/.emacs.d/gpicker.el"))
+;;(global-set-key [?\C-,] 'gpicker-find-file)
+;;(gpicker-visit-project (expand-file-name "."))
 
 ;; CEDET's Speedbar:
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/cedet-1.0"))
@@ -29,8 +35,8 @@
 
 ;; Dired-X is a nice File-Browser
 (setq dired-listing-switches "-lah")
-;; (add-hook 'dired-load-hook
-;; 	  (function (lambda () (load "dired-x"))))
+(add-hook 'dired-load-hook
+ 	  (function (lambda () (load "dired-x"))))
 
 ;; Interactively Do Things (highly recommended, but not strictly required)
 (require 'ido)
@@ -95,36 +101,9 @@
 (require 'xcscope)
 
 ;; Autocomplete
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories (expand-file-name "~/.emacs.d/ac-dict"))
-(ac-config-default)
-;; Autocomplete displaying tags:
-(defun ac-semantic-construct-candidates (tags)
-  "Construct candidates from the list inside of tags."
-  (apply 'append
-         (mapcar (lambda (tag)
-                   (if (listp tag)
-                     (let ((type (semantic-tag-type tag))
-                           (class (semantic-tag-class tag))
-                           (name (semantic-tag-name tag)))
-                       (if (or (and (stringp type)
-                                    (string= type "class"))
-                               (eq class 'function)
-                               (eq class 'variable))
-                         (list (list name type class))))))
-                 tags)))
-
-(defvar ac-source-semantic-analysis nil)
-(setq ac-source-semantic
-      `((sigil . "b")
-        (init . (lambda () (setq ac-source-semantic-analysis
-                                 (condition-case nil
-                                                 (ac-semantic-construct-candidates (semantic-fetch-tags))))))
-        (candidates . (lambda ()
-                        (if ac-source-semantic-analysis
-                          (all-completions ac-target (mapcar 'car ac-source-semantic-analysis)))))))
-
-(setq ac-sources (append ac-sources '(ac-source-dictionary ac-source-abbrev ac-source-css-property ac-source-eclim ac-source-features ac-source-filename ac-source-files-in-current-dir ac-source-functions ac-source-gtags ac-source-imenu ac-source-semantic ac-source-semantic-raw ac-source-symbols ac-source-variables ac-source-words-in-all-buffer)))
+;; (require 'auto-complete-config)
+;; (add-to-list 'ac-dictionary-directories (expand-file-name "~/.emacs.d/ac-dict"))
+;; (ac-config-default)
 
 ;; Icicles
 ;; clashes with IDO
